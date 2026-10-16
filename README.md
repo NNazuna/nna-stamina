@@ -86,7 +86,7 @@ gradle assembleDebug       # build the APK
 
 The stamina math (regeneration, time until full, spending, daily reset per server time zone) lives in `Calc` and is covered by unit tests in [`app/src/test`](app/src/test). They run on the JVM, no device needed.
 
-Every push runs the tests and builds the APK with GitHub Actions. When `versionName` in `app/build.gradle.kts` changes, a new release is published with notes taken from [`CHANGELOG.md`](CHANGELOG.md).
+Every push runs the tests and builds the APK with GitHub Actions. Releases are signed with a private key stored in the repository's Actions secrets; local builds use the default debug key. When `versionName` in `app/build.gradle.kts` changes, a new release is published with notes taken from [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Disclaimer
 
