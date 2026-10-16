@@ -13,6 +13,12 @@
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
+<p align="center">
+  <a href="../../actions/workflows/build.yml"><img src="../../actions/workflows/build.yml/badge.svg" alt="Build"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/Android-8.0%2B-3ddc84" alt="Android 8.0+">
+</p>
+
 ---
 
 ## Overview
@@ -71,13 +77,16 @@ Game values are community-documented and can change with game updates. If a game
 
 ## Building from source
 
-The project uses Gradle 8.7 with Android Gradle Plugin 8.5 and Kotlin 1.9. It has no third-party dependencies.
+The project uses Gradle 8.7 with Android Gradle Plugin 8.5 and Kotlin 1.9. The app has no third-party dependencies (JUnit is used for tests only).
 
 ```bash
-gradle assembleDebug
+gradle testDebugUnitTest   # run unit tests
+gradle assembleDebug       # build the APK
 ```
 
-Every push to `main` builds the APK with GitHub Actions. When `versionName` in `app/build.gradle.kts` changes, a new release is published with notes taken from [`CHANGELOG.md`](CHANGELOG.md).
+The stamina math (regeneration, time until full, spending, daily reset per server time zone) lives in `Calc` and is covered by unit tests in [`app/src/test`](app/src/test). They run on the JVM, no device needed.
+
+Every push runs the tests and builds the APK with GitHub Actions. Releases are signed with a private key stored in the repository's Actions secrets; local builds use the default debug key. When `versionName` in `app/build.gradle.kts` changes, a new release is published with notes taken from [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Disclaimer
 

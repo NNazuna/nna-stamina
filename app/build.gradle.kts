@@ -11,27 +11,31 @@ android {
         applicationId = "com.nnazuna.nnastamina"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
     }
 
-    // Fixed signing key so new versions install over previous ones.
+    // Release key comes from the environment (GitHub Actions secrets), never from the repo.
+    // Without it (local builds, forks) the default debug key is used.
+    val signingStore = System.getenv("SIGNING_STORE_FILE")
     signingConfigs {
-        create("stable") {
-            storeFile = file("signing/nnastamina.keystore")
-            storePassword = "J9AMCluPi1e3CjxVW0kK"
-            keyAlias = "nnastamina"
-            keyPassword = "J9AMCluPi1e3CjxVW0kK"
+        if (signingStore != null) {
+            create("stable") {
+                storeFile = file(signingStore)
+                storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+                keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+                keyPassword = System.getenv("SIGNING_STORE_PASSWORD")
+            }
         }
     }
 
     buildTypes {
         debug {
-            signingConfig = signingConfigs.getByName("stable")
+            if (signingStore != null) signingConfig = signingConfigs.getByName("stable")
         }
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("stable")
+            if (signingStore != null) signingConfig = signingConfigs.getByName("stable")
         }
     }
 
@@ -45,4 +49,8 @@ android {
     buildFeatures {
         buildConfig = true
     }
+}
+
+dependencies {
+    testImplementation("junit:junit:4.13.2")
 }
